@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)
 library(tidyverse)
 library(alphavantager)
+library(plotly)
 
 av_api_key("IP3TG8GBOWDEVU2S")
 args(av_get)

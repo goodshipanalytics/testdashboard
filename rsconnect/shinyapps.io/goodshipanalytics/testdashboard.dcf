@@ -1,0 +1,10 @@
+name: testdashboard
+title:
+username:
+account: goodshipanalytics
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 287973
+bundleId: 1238294
+url: https://goodshipanalytics.shinyapps.io/testdashboard/
+when: 1519504061.28314

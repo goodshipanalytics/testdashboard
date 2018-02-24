@@ -1,6 +1,19 @@
 library(shiny)
 library(ggplot2)
 library(tidyverse)
+library(plotly)
+
+av_api_key("IP3TG8GBOWDEVU2S")
+args(av_get)
+amazonDF <- av_get(symbol = "AMZN", av_fun = "TIME_SERIES_DAILY", interval = "daily")
+appleDF <- av_get(symbol = "AAPL", av_fun = "TIME_SERIES_DAILY", interval = "daily")
+alphabetDF <- av_get(symbol = "GOOGL", av_fun = "TIME_SERIES_DAILY", interval = "daily")
+
+amazonDF$Company <- "Amazon"
+appleDF$Company <- "Apple"
+alphabetDF$Company <- "Alphabet"
+
+combinedDF <- rbind(amazonDF,appleDF,alphabetDF)
 
 function(input, output) {
   
