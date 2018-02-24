@@ -30,6 +30,12 @@ amazonDF <- av_get(symbol = "AMZN", av_fun = "TIME_SERIES_DAILY", interval = "da
 appleDF <- av_get(symbol = "AAPL", av_fun = "TIME_SERIES_DAILY", interval = "daily")
 alphabetDF <- av_get(symbol = "GOOGL", av_fun = "TIME_SERIES_DAILY", interval = "daily")
 
+amazonDF$Company <- "Amazon"
+appleDF$Company <- "Apple"
+alphabetDF$Company <- "Alphabet"
+
+combinedDF <- rbind(amazonDF,appleDF,alphabetDF)
+
 ```
 
 Stocks
@@ -38,25 +44,30 @@ Stocks
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Opening share price
+### Opening share price (ggplot)
 
-```{r fig.width=15}
-ggplot() + 
-geom_line(data = amazonDF, aes(timestamp, open, color = "red")) + 
-geom_line(data = appleDF, aes(timestamp, open, colour = "blue")) + 
-geom_line(data = alphabetDF, aes(timestamp, open, colour = "green")) +  
-theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-xlab("Timestamp") + ylab("Value") +
-scale_color_discrete(name = "Company", labels = c("Amazon", "Apple", "Alphabet"))
+```{r fig.width=17}
+
+ggplot(data = combinedDF) +
+  geom_line(mapping = aes(x = timestamp, y = open, colour = Company)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  theme_bw() +
+  xlab("Date") + ylab("Opening value") +
+  theme(text = element_text(size=20))
 ```
 
+### Opening share price (plotly)
 
+```{r fig.width=15}
 
-### Cryptocurrencies
+plot_ly(data = combinedDF, x = ~timestamp, y = ~open, color = ~Company, type = 'scatter', mode = 'lines') %>%
+  layout(xaxis = list(title = 'Date', showline = TRUE), yaxis = list(title = 'Opening value', showline = TRUE))
 
-Column {data-width=300}
------------------------------------------------------------------------
+```
+
+Column {data-width=350}
+-----------------------------------------------------
 
 ### Select Stocks data to display
 
-### Select Cryptocurrency data to display
+### Select Stocks data to display
