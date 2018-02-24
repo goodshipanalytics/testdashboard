@@ -1,0 +1,47 @@
+---
+title: "Test Dashboard"
+author: "avt"
+date: "15/02/2018"
+output 
+    flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: cosmo
+    logo: ship.jpg
+    favicon: ship.jpg
+---
+Alphavantage API key:  IP3TG8GBOWDEVU2S
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(flexdashboard)
+library(plotly)
+library(highcharter)
+library(treemap)
+library(ggplot2)
+library(alphavantager)
+library(knitr)
+
+source("test_datamgmt.R")
+
+```
+
+Stocks & Cryptocurrencies
+=====================================
+
+Column {data-width=700}
+-----------------------------------------------------------------------
+
+### Stocks
+
+p<-ggplot() + geom_line(data = test_df, aes(timestamp, open, color = "red")) + geom_line(data = test_df, aes(timestamp, close, colour = "blue")) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Timestamp") + ylab("Value") + ggtitle("Microsoft share value") + scale_color_discrete(name = "Daily value", labels = c("Open", "Close"))
+
+### Cryptocurrencies
+
+Column {data-width=300}
+-----------------------------------------------------------------------
+
+### Select Stocks data to display
+
+### Select Cryptocurrency data to display
