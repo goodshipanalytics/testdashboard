@@ -10,7 +10,7 @@ output:
 runtime: shiny
 ---
 
-```{r setup, include=FALSE}
+```{r global, include=FALSE}
 
 library(flexdashboard)
 library(plotly)
@@ -54,6 +54,13 @@ sliderInput("timestamp", label = "Date to display:",
             min(combinedDF$timestamp), max(combinedDF$timestamp), 
             value = c(min(combinedDF$timestamp), max(combinedDF$timestamp)), 
             step = NULL)
+
+dataset <- reactive({
+  combinedDF %>%
+    filter(Company == input[['Company']]) %>%
+    filter(between(timestamp, as.Date(input$timestamp[1]),        
+    as.Date(input$timestamp[2])))
+})
 ```
 
 Column {data-width=650}
@@ -62,11 +69,6 @@ Column {data-width=650}
 ### Opening share price (ggplot)
 
 ```{r fig.width=17}
-
-dataset <- reactive({
-  combinedDF %>%
-    filter(Company == input[['Company']])
-})
 
 renderPlot({
     ggplot(dataset(), aes(x = timestamp, y = open, colour = Company)) +
@@ -83,9 +85,12 @@ renderPlot({
 
 ```{r fig.width=15}
 
-plot_ly(data = combinedDF, x = ~timestamp, y = ~open, color = ~Company, type = 'scatter', mode = 'lines') %>%
-  layout(xaxis = list(title = 'Date', showline = TRUE), yaxis = list(title = 'Opening value', showline = TRUE))
-
+renderPlotly({
+  plot_ly(dataset(), x = ~timestamp, y = ~open, color = ~Company, 
+  type =   'scatter', mode = 'lines') %>%
+  layout(xaxis = list(title = 'Date', showline = TRUE), 
+  yaxis = list(title = 'Opening value', showline = TRUE))
+})
 ```
 
 
