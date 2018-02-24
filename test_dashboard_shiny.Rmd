@@ -7,6 +7,7 @@ output:
     theme: cosmo
     logo: favicon_48x48.png
     favicon: favicon_48x48.png
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -40,6 +41,21 @@ combinedDF <- rbind(amazonDF,appleDF,alphabetDF)
 Stocks
 ======
 
+Column {.sidebar}
+-----------------------------------------------------
+
+### Select Stocks data to display
+
+```{r}
+selectInput("Company", label = "Company:",
+            choices = c("Amazon","Apple", "Alphabet"),selected = c("Amazon"), multiple = TRUE)
+
+sliderInput("timestamp", label = "Date to display:",
+            min(combinedDF$timestamp), max(combinedDF$timestamp), 
+            value = c(min(combinedDF$timestamp), max(combinedDF$timestamp)), 
+            step = NULL)
+```
+
 Column {data-width=650}
 -----------------------------------------------------------------------
 
@@ -47,12 +63,20 @@ Column {data-width=650}
 
 ```{r fig.width=17}
 
-ggplot(data = combinedDF) +
-  geom_line(mapping = aes(x = timestamp, y = open, colour = Company)) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  theme_bw() +
-  xlab("Date") + ylab("Opening value") +
-  theme(text = element_text(size=20))
+dataset <- reactive({
+  combinedDF %>%
+    filter(Company == input[['Company']])
+})
+
+renderPlot({
+    ggplot(dataset(), aes(x = timestamp, y = open, colour = Company)) +
+    geom_line() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    theme_bw() +
+    xlab("Date") + ylab("Opening value") +
+    theme(text = element_text(size=20))
+})
+
 ```
 
 ### Opening share price (plotly)
@@ -64,9 +88,4 @@ plot_ly(data = combinedDF, x = ~timestamp, y = ~open, color = ~Company, type = '
 
 ```
 
-Column {data-width=350}
------------------------------------------------------
 
-### Select Stocks data to display
-
-### Select Stocks data to display
