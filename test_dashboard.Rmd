@@ -5,8 +5,8 @@ output:
     orientation: columns
     vertical_layout: fill
     theme: cosmo
-    logo: goodshiplogo48.png
-    favicon: goodshiplogo48.png
+    logo: favicon_48x48.png
+    favicon: favicon_48x48.png
 ---
 
 ```{r setup, include=FALSE}
